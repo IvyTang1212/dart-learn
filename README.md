@@ -281,3 +281,86 @@ print(x == (y + z)); //  输出true
 ```
 
 operator 是 Dart 的关键字，与运算符一起使用，表示一个类成员运算符函数。在理解时，我们应该把 operator 和运算符作为整体，看作是一个成员函数名。
+
+## 5. Async
+
+避免回调地狱,让你的代码更可读的通过使用async和await。
+
+```dart
+const oneSecond = Duration(seconds: 1);
+// ···
+Future<void> printWithDelay(String message) async {
+  await Future.delayed(oneSecond);
+  print(message);
+}
+
+```
+
+等同于以下代码
+
+```dart
+Future<void> printWithDelay(String message) {
+  return Future.delayed(oneSecond).then((_) {
+    print(message);
+  });
+}
+```
+
+async 和 await 使异步代码容易阅读.
+
+```dart
+Future<void> createDescriptions(Iterable<String> objects) async {
+  for (var object in objects) {
+    try {
+      var file = File('$object.txt');
+      if (await file.exists()) {
+        var modified = await file.lastModified();
+        print(
+            'File for $object already exists. It was modified on $modified.');
+        continue;
+      }
+      await file.create();
+      await file.writeAsString('Start describing $object in this file.');
+    } on IOException catch (e) {
+      print('Cannot create description for $object: $e');
+    }
+  }
+}
+```
+
+还可以使用async* , 一个不错的方式来构建streams。  
+
+```dart
+Stream<String> report(Spacecraft craft, Iterable<String> objects) async* {
+  for (var object in objects) {
+    await Future.delayed(oneSecond);
+    yield '${craft.name} flies by $object';
+  }
+}
+```
+
+## 6. Exceptions
+
+引发一个异常,使用 throw:  
+
+```dart
+if (astronauts == 0) {
+  throw StateError('No astronauts.');
+}
+```
+
+捕获到一个异常,使用 a try statement with on or catch (or both):  
+
+```dart
+try {
+  for (var object in flybyObjects) {
+    var description = await File('$object.txt').readAsString();
+    print(description);
+  }
+} on IOException catch (e) {
+  print('Could not describe object: $e');
+} finally {
+  flybyObjects.clear();
+}
+```
+
