@@ -1,7 +1,6 @@
 # dart-learn
 
-参考资料：[dart官网](https://dart.dev/codelabs/async-await)
-[极客时间学习flutter](https://time.geekbang.org/column/article/106816)
+参考资料：[dart官网](https://dart.dev/)
 
 ## 1. Dart 的变量与类型
 
@@ -38,6 +37,18 @@ assert(number == 0);
 ```dart
 var s = 'cat';
 var s1 = 'this is a uppercased string: ${s.toUpperCase()}';
+```
+
+创建一个多行字符串的另一种方法:使用三重引号用单引号或双引号:  
+
+```dart
+var s1 = '''
+You can create
+multi-line strings like this one.
+''';
+
+var s2 = """This is also a
+multi-line string.""";
 ```
 
 ### 1.2. List 与 Map
@@ -363,4 +374,171 @@ try {
   flybyObjects.clear();
 }
 ```
+
+确保运行一些代码是否抛出异常, 使用finally 
+
+```dart
+try {
+  breedMoreLlamas();
+} finally {
+  // Always clean up, even if an exception is thrown.
+  cleanLlamaStalls();
+}
+
+
+// The finally clause runs after any matching catch clauses:
+
+try {
+  breedMoreLlamas();
+} catch (e) {
+  print('Error: $e'); // Handle the exception first.
+} finally {
+  cleanLlamaStalls(); // Then clean up.
+}
+```
+
+## 7. Control flow statements
+
+- if and else
+- for loops
+- while and do-while loops
+- break and continue
+- switch and case
+- assert
+
+### 7.1. If and else
+
+```dart
+if (isRaining()) {
+  you.bringRainCoat();
+} else if (isSnowing()) {
+  you.wearJacket();
+} else {
+  car.putTopDown();
+}
+```
+
+### 7.2. For loops
+
+```dart
+var message = StringBuffer('Dart is fun');
+for (var i = 0; i < 5; i++) {
+  message.write('!');
+}
+
+
+candidates.forEach((candidate) => candidate.interview());
+
+
+var collection = [0, 1, 2];
+for (var x in collection) {
+  print(x); // 0 1 2
+}
+```
+
+### 7.3. While and do-while
+
+```dart
+while (!isDone()) {
+  doSomething();
+}
+
+
+do {
+  printLine();
+} while (!atEndOfPage());
+```
+
+
+### 7.4. Break and continue
+
+```dart
+while (true) {
+  if (shutDownRequested()) break;
+  processIncomingRequests();
+}
+
+for (int i = 0; i < candidates.length; i++) {
+  var candidate = candidates[i];
+  if (candidate.yearsExperience < 5) {
+    continue;
+  }
+  candidate.interview();
+}
+
+```
+
+### 7.5. Switch and case
+
+```dart
+var command = 'OPEN';
+switch (command) {
+  case 'CLOSED':
+    executeClosed();
+    break;
+  case 'PENDING':
+    executePending();
+    break;
+  case 'APPROVED':
+    executeApproved();
+    break;
+  case 'DENIED':
+    executeDenied();
+    break;
+  case 'OPEN':
+    executeOpen();
+    break;
+  default:
+    executeUnknown();
+}
+
+
+// However, Dart does support empty case clauses, allowing a form of fall-through:
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED': // Empty case falls through.
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+
+// If you really want fall-through, you can use a continue statement and a label:
+var command = 'CLOSED';
+switch (command) {
+  case 'CLOSED':
+    executeClosed();
+    continue nowClosed;
+  // Continues executing at the nowClosed label.
+
+  nowClosed:
+  case 'NOW_CLOSED':
+    // Runs for both CLOSED and NOW_CLOSED.
+    executeNowClosed();
+    break;
+}
+```
+
+### 7.6. Assert
+
+```dart
+// Make sure the variable has a non-null value.
+assert(text != null);
+
+// Make sure the value is less than 100.
+assert(number < 100);
+
+// Make sure this is an https URL.
+assert(urlString.startsWith('https'));
+
+assert(urlString.startsWith('https'),
+    'URL ($urlString) should start with "https".');
+```
+
+
+
+
+
+
+
 
